@@ -9,7 +9,7 @@ export default function Home() {
         <div>Leaderboard</div>
     </div>
 
-    <footer>Riddle Game v1.0</footer>
+    <footer>Riddle Game v1.0 !!!</footer>
     </>
   )
 }
