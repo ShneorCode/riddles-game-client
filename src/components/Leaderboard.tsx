@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { loadPlayers } from '../api/riddleService';
-import type { Player } from '../types/types';
+import React, { useState, useEffect } from "react";
+import { loadPlayers } from "../api/riddleService";
+import type { Player } from "../types/types";
 
 const Leaderboard: React.FC = () => {
   const [players, setPlayers] = useState<Player[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   useEffect(() => {
     const fetchPlayers = async () => {
@@ -14,13 +14,19 @@ const Leaderboard: React.FC = () => {
       if (data) {
         setPlayers(
           data.sort((a, b) => {
-            const timeA = Object.values(a.times).reduce((sum, cur) => sum + cur, 0);
-            const timeB = Object.values(b.times).reduce((sum, cur) => sum + cur, 0);
+            const timeA = Object.values(a.times).reduce(
+              (sum, cur) => sum + cur,
+              0
+            );
+            const timeB = Object.values(b.times).reduce(
+              (sum, cur) => sum + cur,
+              0
+            );
             return timeA - timeB;
           })
         );
       } else {
-        setError('Error loading leaderboard.');
+        setError("Error loading leaderboard.");
       }
       setLoading(false);
     };
@@ -33,32 +39,28 @@ const Leaderboard: React.FC = () => {
   return (
     <div className="container leaderboard-page">
       <h2>Leaderboard</h2>
-      {players.length === 0 ? (
-        <p>No data yet. Play to create a record!</p>
-      ) : (
-        <table>
-          <thead>
-            <tr>
-              <th>Rank</th>
-              <th>Player Name</th>
-              <th>Total Time (seconds)</th>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Player Name</th>
+            <th>Total Time (seconds)</th>
+          </tr>
+        </thead>
+        <tbody>
+          {players.map((player, index) => (
+            <tr key={player.id}>
+              <td>{index + 1}</td>
+              <td>{player.name}</td>
+              <td>
+                {Object.values(player.times)
+                  .reduce((sum, cur) => sum + cur, 0)
+                  .toFixed(2)}
+              </td>
             </tr>
-          </thead>
-          <tbody>
-            {players.map((player, index) => (
-              <tr key={player.id}>
-                <td>{index + 1}</td>
-                <td>{player.name}</td>
-                <td>
-                  {Object.values(player.times)
-                    .reduce((sum, cur) => sum + cur, 0)
-                    .toFixed(2)}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 };

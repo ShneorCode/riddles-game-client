@@ -28,20 +28,19 @@ const App: React.FC = () => {
   return (
     <>
       <header>
-        <h1>משחק החידות</h1>
         <nav>
-          <Link to="/">ראשי</Link>
-          <Link to="/play">שחק</Link>
-          <Link to="/leaderboard">לוח תוצאות</Link>
+          <Link to="/">Home</Link>
+          <Link to="/play">Play</Link>
+          <Link to="/leaderboard">Leaderboard</Link>
           {currentUser?.role === 'admin' && (
-            <Link to="/admin">ניהול חידות</Link>
+            <Link to="/admin">Manage Riddles</Link>
           )}
           {!currentUser ? (
-            <Link to="/auth">כניסה / הרשמה</Link>
+            <Link to="/auth">Login / Register</Link>
           ) : (
             <>
-              <span>שלום, {currentUser.username} ({currentUser.role})</span>
-              <button onClick={handleLogout}>יציאה</button>
+              <span>Hello, {currentUser.username} ({currentUser.role})</span>
+              <button onClick={handleLogout}>Logout</button>
             </>
           )}
         </nav>
