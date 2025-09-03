@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Routes, Route, Link } from 'react-router-dom';
 import { getCurrentUser, logoutUser } from './api/authService';
-import type { User } from './types';
+import type { User } from './types/types';
 import Home from './components/Home';
 import Auth from './components/Auth';
 import Play from './components/Play';

@@ -1,4 +1,4 @@
-import type { User } from '../types';
+import type { User } from '../types/types';
 
 const AUTH_URL = 'http://localhost:3007/api/auth/login';
 const REGISTER_URL = 'http://localhost:3007/api/auth/register';

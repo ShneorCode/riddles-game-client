@@ -24,16 +24,16 @@ const Auth: React.FC<AuthProps> = ({ onAuthSuccess }) => {
       onAuthSuccess(getCurrentUser());
       navigate('/');
     } else {
-      setError(isLogin ? 'שם משתמש או סיסמה שגויים.' : 'ההרשמה נכשלה. ייתכן שהמשתמש כבר קיים.');
+      setError(isLogin ? 'Invalid username or password.' : 'Registration failed. The user may already exist.');
     }
   };
 
   return (
     <div className="container auth-form">
-      <h2>{isLogin ? 'כניסה' : 'הרשמה'}</h2>
+      <h2>{isLogin ? 'Login' : 'Register'}</h2>
       <form onSubmit={handleSubmit}>
         <div className="form-group">
-          <label htmlFor="username">שם משתמש:</label>
+          <label htmlFor="username">Username:</label>
           <input
             id="username"
             type="text"
@@ -43,7 +43,7 @@ const Auth: React.FC<AuthProps> = ({ onAuthSuccess }) => {
           />
         </div>
         <div className="form-group">
-          <label htmlFor="password">סיסמה:</label>
+          <label htmlFor="password">Password:</label>
           <input
             id="password"
             type="password"
@@ -53,10 +53,10 @@ const Auth: React.FC<AuthProps> = ({ onAuthSuccess }) => {
           />
         </div>
         {error && <p className="error-message">{error}</p>}
-        <button type="submit" className="primary-btn">{isLogin ? 'התחבר' : 'הירשם'}</button>
+        <button type="submit" className="primary-btn">{isLogin ? 'Login' : 'Register'}</button>
       </form>
       <button className="link-btn" onClick={() => setIsLogin(!isLogin)}>
-        {isLogin ? 'אין לך חשבון? הירשם כאן.' : 'יש לך כבר חשבון? התחבר כאן.'}
+        {isLogin ? "Don't have an account? Register here." : "Already have an account? Login here."}
       </button>
     </div>
   );

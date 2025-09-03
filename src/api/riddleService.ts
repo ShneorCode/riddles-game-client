@@ -1,6 +1,6 @@
 import { getAuthHeaders } from './authService';
-import type { Riddle } from '../types';
-import type { Player } from '../types';
+import type { Riddle } from '../types/types';
+import type { Player } from '../types/types';
 
 const BASE_URL = 'http://localhost:3007/api/riddles';
 const PLAYERS_URL = 'http://localhost:3007/api/players';
