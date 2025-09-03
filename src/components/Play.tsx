@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { loadRiddles, updatePlayerTime } from '../api/riddleService';
 import { getCurrentUser } from '../api/authService';
-import { Riddle } from '../types';
+import type { Riddle } from '../types';
 
 type Difficulty = 'easy' | 'medium' | 'hard';
 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { loadPlayers } from '../api/riddleService';
-import { Player } from '../types';
+import type { Player } from '../types';
 
 const Leaderboard: React.FC = () => {
   const [players, setPlayers] = useState<Player[]>([]);

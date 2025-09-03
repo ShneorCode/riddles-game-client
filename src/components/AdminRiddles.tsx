@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { loadRiddles, createRiddleOnServer, updateRiddleOnServer, deleteRiddleOnServer } from '../api/riddleService';
-import { Riddle } from '../types';
+import type { Riddle } from '../types';
 
 const AdminRiddles: React.FC = () => {
   const [riddles, setRiddles] = useState<Riddle[]>([]);
