@@ -1,0 +1,140 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f0f2f5;
+  color: #333;
+  margin: 0;
+  padding: 0;
+  direction: rtl;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+header {
+  background-color: #fff;
+  padding: 1rem 2rem;
+  border-bottom: 1px solid #ddd;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+header nav a, header button {
+  margin-right: 1rem;
+  text-decoration: none;
+  color: #007bff;
+  font-weight: bold;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+header nav span {
+  margin-right: 1rem;
+}
+
+main {
+  flex-grow: 1;
+  padding: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.container {
+  background-color: #fff;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  max-width: 800px;
+  width: 100%;
+}
+
+.button-group button {
+  margin: 0 0.5rem;
+}
+
+.primary-btn, .secondary-btn, .link-btn {
+  padding: 0.75rem 1.5rem;
+  border-radius: 5px;
+  border: 1px solid #007bff;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.primary-btn {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.primary-btn:hover {
+  background-color: #0056b3;
+}
+
+.secondary-btn {
+  background-color: #fff;
+  color: #007bff;
+}
+
+.secondary-btn:hover {
+  background-color: #f0f0f0;
+}
+
+.link-btn {
+  background: none;
+  border: none;
+  color: #007bff;
+  text-decoration: underline;
+  margin-top: 1rem;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+}
+
+.form-group input, .form-group textarea, .form-group select {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.error-message {
+  color: red;
+  margin-top: 0.5rem;
+}
+
+.status-message {
+  margin-top: 1rem;
+  font-style: italic;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 0.75rem;
+  text-align: right;
+}
+
+th {
+  background-color: #f2f2f2;
+}
