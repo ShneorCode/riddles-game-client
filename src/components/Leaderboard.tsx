@@ -48,9 +48,8 @@ const Leaderboard: React.FC = () => {
           </tr>
         </thead>
         <tbody>
-          {players.map((player, index) => (
+          {players.map((player) => (
             <tr key={player.id}>
-              <td>{index + 1}</td>
               <td>{player.name}</td>
               <td>
                 {Object.values(player.times)
