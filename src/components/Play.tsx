@@ -3,117 +3,127 @@ import { loadRiddles, updatePlayerTime } from '../api/riddleService';
 import { getCurrentUser } from '../api/authService';
 import type { Riddle } from '../types';
 
-type Difficulty = 'easy' | 'medium' | 'hard';
+type Difficulty = 'easy' | 'medium' | 'hard' | 'all';
 
 const Play: React.FC = () => {
-  const [allRiddles, setAllRiddles] = useState<Riddle[] | null>(null);
-  const [difficulty, setDifficulty] = useState<Difficulty | null>(null);
-  const [filteredRiddles, setFilteredRiddles] = useState<Riddle[]>([]);
-  const [currentRiddleIndex, setCurrentRiddleIndex] = useState(0);
-  const [userAnswer, setUserAnswer] = useState('');
-  const [message, setMessage] = useState('');
-  const [startTime, setStartTime] = useState(0);
-  const [isGameActive, setIsGameActive] = useState(false);
-  const [totalTime, setTotalTime] = useState(0);
+    const [allRiddles, setAllRiddles] = useState<Riddle[] | null>(null);
+    const [difficulty, setDifficulty] = useState<Difficulty | null>(null);
+    const [filteredRiddles, setFilteredRiddles] = useState<Riddle[]>([]);
+    const [currentRiddleIndex, setCurrentRiddleIndex] = useState(0);
+    const [userAnswer, setUserAnswer] = useState('');
+    const [message, setMessage] = useState('');
+    const [startTime, setStartTime] = useState(0);
+    const [isGameActive, setIsGameActive] = useState(false);
+    const [totalTime, setTotalTime] = useState(0);
 
-  const currentUser = getCurrentUser();
-  const isUserOrAdmin = currentUser && (currentUser.role === 'user' || currentUser.role === 'admin');
+    const currentUser = getCurrentUser();
+    const isUserOrAdmin = true;
 
-  useEffect(() => {
-    const fetchRiddles = async () => {
-      const riddles = await loadRiddles();
-      setAllRiddles(riddles);
+    useEffect(() => {
+        const fetchRiddles = async () => {
+            const riddles = await loadRiddles();
+            setAllRiddles(riddles);
+        };
+        fetchRiddles();
+    }, []);
+
+    useEffect(() => {
+        if (difficulty && allRiddles) {
+            const riddlesToPlay = difficulty === 'all'
+                ? allRiddles
+                : allRiddles.filter(r => r.difficulty === difficulty);
+
+            setFilteredRiddles(riddlesToPlay);
+            setCurrentRiddleIndex(0);
+            setIsGameActive(true);
+            setStartTime(Date.now());
+            setTotalTime(0);
+            setMessage('');
+        }
+    }, [difficulty, allRiddles]);
+
+    const handleAnswerSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!isGameActive) return;
+
+        const currentRiddle = filteredRiddles[currentRiddleIndex];
+        if (userAnswer.trim().toLowerCase() === currentRiddle.correctAnswer.trim().toLowerCase()) {
+            const timeTaken = (Date.now() - startTime) / 1000;
+            setTotalTime(prev => prev + timeTaken);
+            
+            if (currentRiddleIndex + 1 < filteredRiddles.length) {
+                setMessage('נכון! עובר לחידה הבאה...');
+                setTimeout(() => {
+                    setCurrentRiddleIndex(currentRiddleIndex + 1);
+                    setUserAnswer('');
+                    setMessage('');
+                    setStartTime(Date.now());
+                }, 1000);
+            } else {
+                setMessage('כל הכבוד! סיימת את המשחק!');
+                setIsGameActive(false);
+                saveScore();
+            }
+        } else {
+            setMessage('טעות. נסה שוב.');
+        }
     };
-    fetchRiddles();
-  }, []);
 
-  useEffect(() => {
-    if (difficulty && allRiddles) {
-      setFilteredRiddles(allRiddles.filter(r => r.difficulty === difficulty));
-      setCurrentRiddleIndex(0);
-      setIsGameActive(true);
-      setStartTime(Date.now());
-      setTotalTime(0);
-      setMessage('');
+    const saveScore = async () => {
+        if (
+            isUserOrAdmin &&
+            difficulty &&
+            difficulty !== 'all' &&
+            currentUser
+        ) {
+            await updatePlayerTime(currentUser.username, difficulty, totalTime);
+            alert('התוצאה נשמרה בלוח התוצאות!');
+        }
+    };
+
+    const renderRiddle = () => {
+        const riddle = filteredRiddles[currentRiddleIndex];
+        if (!riddle) return <p>אין חידות בקטגוריה זו.</p>;
+
+        return (
+            <div className="riddle-card">
+                <h3>{riddle.name}</h3>
+                <p>{riddle.taskDescription}</p>
+                <form onSubmit={handleAnswerSubmit}>
+                    <input
+                        type="text"
+                        value={userAnswer}
+                        onChange={(e) => setUserAnswer(e.target.value)}
+                        placeholder="הקלד את תשובתך..."
+                        autoFocus
+                    />
+                    <button type="submit">שלח</button>
+                </form>
+                {message && <p className="status-message">{message}</p>}
+            </div>
+        );
+    };
+
+    if (!isGameActive) {
+        return (
+            <div className="container play-menu">
+                <h2>בחר רמת קושי</h2>
+                <div className="button-group">
+                    <button onClick={() => setDifficulty('all')}>כל החידות</button>
+                    <button onClick={() => setDifficulty('easy')}>קל</button>
+                    <button onClick={() => setDifficulty('medium')}>בינוני</button>
+                    <button onClick={() => setDifficulty('hard')}>קשה</button>
+                </div>
+            </div>
+        );
     }
-  }, [difficulty, allRiddles]);
-
-  const handleAnswerSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!isGameActive) return;
-
-    const currentRiddle = filteredRiddles[currentRiddleIndex];
-    if (userAnswer.trim().toLowerCase() === currentRiddle.correctAnswer.trim().toLowerCase()) {
-      const timeTaken = (Date.now() - startTime) / 1000;
-      setTotalTime(prev => prev + timeTaken);
-      
-      if (currentRiddleIndex + 1 < filteredRiddles.length) {
-        setMessage('נכון! עובר לחידה הבאה...');
-        setTimeout(() => {
-          setCurrentRiddleIndex(currentRiddleIndex + 1);
-          setUserAnswer('');
-          setMessage('');
-          setStartTime(Date.now());
-        }, 1000);
-      } else {
-        setMessage('כל הכבוד! סיימת את המשחק!');
-        setIsGameActive(false);
-        saveScore();
-      }
-    } else {
-      setMessage('טעות. נסה שוב.');
-    }
-  };
-
-  const saveScore = async () => {
-    if (isUserOrAdmin && difficulty) {
-      await updatePlayerTime(currentUser.username, difficulty, totalTime);
-      alert('התוצאה נשמרה בלוח התוצאות!');
-    }
-  };
-
-  const renderRiddle = () => {
-    const riddle = filteredRiddles[currentRiddleIndex];
-    if (!riddle) return <p>אין חידות בקטגוריה זו.</p>;
 
     return (
-      <div className="riddle-card">
-        <h3>{riddle.name}</h3>
-        <p>{riddle.taskDescription}</p>
-        <form onSubmit={handleAnswerSubmit}>
-          <input
-            type="text"
-            value={userAnswer}
-            onChange={(e) => setUserAnswer(e.target.value)}
-            placeholder="הקלד את תשובתך..."
-            autoFocus
-          />
-          <button type="submit">שלח</button>
-        </form>
-        {message && <p className="status-message">{message}</p>}
-      </div>
-    );
-  };
-
-  if (!isGameActive) {
-    return (
-      <div className="container play-menu">
-        <h2>בחר רמת קושי</h2>
-        <div className="button-group">
-          <button onClick={() => setDifficulty('easy')}>קל</button>
-          <button onClick={() => setDifficulty('medium')}>בינוני</button>
-          <button onClick={() => setDifficulty('hard')}>קשה</button>
+        <div className="container play-page">
+            <h2>משחק פעיל ({difficulty})</h2>
+            {renderRiddle()}
         </div>
-      </div>
     );
-  }
-
-  return (
-    <div className="container play-page">
-      <h2>משחק פעיל ({difficulty})</h2>
-      {renderRiddle()}
-    </div>
-  );
 };
 
 export default Play;

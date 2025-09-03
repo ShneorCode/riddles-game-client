@@ -7,7 +7,7 @@ import Auth from './components/Auth';
 import Play from './components/Play';
 import Leaderboard from './components/Leaderboard';
 import AdminRiddles from './components/AdminRiddles';
-import './styles.css';
+import './index.css';
 
 const App: React.FC = () => {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
